@@ -44,11 +44,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.setFont("fonts/Arkhip_font.ttf");
+        this.init();
+    }
+    private void setFont(String fontPath){
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Arkhip_font.ttf")            //thay thế font chữ mặc định thành font chữ mới step 2
+                .setDefaultFontPath(fontPath)            //thay thế font chữ mặc định thành font chữ mới step 2
                 .setFontAttrId(R.attr.fontPath)
                 .build());
-        init();
     }
 
     @Override //thay thế font chữ mặc định thành font chữ mới step 1
