@@ -28,6 +28,7 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.w3c.dom.Text;
 
+import dmax.dialog.SpotsDialog;
 import techkids.vn.uberclone.models.User;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         this.setFont("fonts/Arkhip_font.ttf");
         this.init();
     }
+
     private void setFont(String fontPath){
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath(fontPath)            //thay thế font chữ mặc định thành font chữ mới step 2
@@ -82,8 +84,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSignInDialog() {
+        btnSignIn.setEnabled(false); //Vô hiệu hóa button khi đang chạy dialog
+
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("SIGN IN");
+        dialog.setTitle("SIGN IN ACCOUNT");
         dialog.setMessage("Please use email to sign in");
 
         LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -93,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         final MaterialEditText edtMailSignIn = signInLayout.findViewById(R.id.edt_sign_in_email);
 
         dialog.setView(signInLayout);
-        dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("SIGN", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //xử lý input khi register account
@@ -104,11 +108,16 @@ public class MainActivity extends AppCompatActivity {
                 if (edtPasswordSignIn.getText().length() < 6) {
                     Snackbar.make(findViewById(R.id.root_layout), "Password too short!!!", Snackbar.LENGTH_SHORT).show();
                 }
+
+                final android.app.AlertDialog alertDialog = new SpotsDialog(MainActivity.this);
+                alertDialog.show();  //tạo và show dialog
+
                 firebaseAuth.signInWithEmailAndPassword(edtMailSignIn.getText().toString().trim(), edtPasswordSignIn.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
                                 startActivity(new Intent(MainActivity.this, Welcome.class));
+                                alertDialog.dismiss();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -116,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onFailure(@NonNull Exception e) {
                                 Snackbar.make(findViewById(R.id.root_layout), "Login fail " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
                                 Log.d(TAG, "onFailure: login fail - "+e.getMessage());
+                                alertDialog.dismiss();
+                                btnSignIn.setEnabled(true);
                             }
                         });
             }
@@ -124,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
             }
         });
 
@@ -133,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showRegisterDialog() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("REGISTER");
+        dialog.setTitle("REGISTER ACCOUNT");
         dialog.setMessage("Please use email to register");
 
         LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -164,6 +174,10 @@ public class MainActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(edtPhoneRegister.getText().toString())) {
                     Snackbar.make(findViewById(R.id.root_layout), "Please enter your phone", Snackbar.LENGTH_SHORT).show();
                 }
+
+                final android.app.AlertDialog alertDialog = new SpotsDialog(MainActivity.this);
+                alertDialog.show();             //tạo và show dialog
+
                 // Xác thực đăng nhập với google authentication
                 firebaseAuth.createUserWithEmailAndPassword(edtMailRegister.getText().toString(), edtPasswordRegister.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -177,20 +191,24 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Snackbar.make(findViewById(R.id.root_layout), "Register success fully !!!", Snackbar.LENGTH_SHORT).show();
+                                                alertDialog.dismiss();
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Snackbar.make(findViewById(R.id.root_layout), "Failed " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                                                alertDialog.dismiss();
                                             }
                                         });
+
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 Snackbar.make(findViewById(R.id.root_layout), "Failed " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
                             }
                         });
             }
@@ -199,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
             }
         });
 

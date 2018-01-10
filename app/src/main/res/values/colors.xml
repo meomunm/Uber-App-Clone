@@ -7,4 +7,8 @@
     <color name="rippleEffectColor">#f816a463</color>
     <color name="btnSignIn">#1fbad6</color>
     <color name="btnTextColor">#83838c</color>
+
+    <color name="baseReleaseColorSwitch">#212121</color>
+    <color name="basePressColorSwitch">#FAFAFA</color>
+    <color name="ballReleaseColorSwitch">#9E9E9E</color>
 </resources>
