@@ -82,7 +82,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
         this.listenerEvent();
     }
 
-    //TODO: Xin quyền tại thời điểm runtime nên cần override lại hàm onRequestPermissionResult()
+    //Xin quyền tại thời điểm runtime nên cần override lại hàm onRequestPermissionResult()
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_PERMISSION_REQUEST_CODE){
@@ -140,6 +140,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
         googleApiClient.connect();
     }
 
+    //Kiểm tra xem thiết bị có hỗ trợ google play service ko
     private boolean checkedPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
@@ -213,11 +214,11 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
                                 if (current != null) {
                                     Log.d(TAG, "onComplete: current không null rồi");
                                     current.remove();
-                                    current = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory
-                                            .fromResource(R.drawable.car))
-                                            .position(new LatLng(latitude, longitude))
-                                            .title("You"));
                                 }
+                                current = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory
+                                        .fromResource(R.drawable.car))
+                                        .position(new LatLng(latitude, longitude))
+                                        .title("You"));
 
                                 //di chuyển camera đến điểm hiện tại
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
