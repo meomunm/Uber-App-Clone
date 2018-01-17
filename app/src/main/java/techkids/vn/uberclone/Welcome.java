@@ -190,6 +190,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
         LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
+
     private void displayLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED        //Kiểm tra xem đã được bật coarse và fine hay chưa
@@ -198,7 +199,6 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        Log.d(TAG, "displayLocation: đừng null nha em");
         googleApiClient.connect();
         if (lastLocation != null) {
             if (swLocation.isChecked()) {
@@ -212,7 +212,6 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
                             public void onComplete(String key, DatabaseError error) {
                                 //add marker
                                 if (current != null) {
-                                    Log.d(TAG, "onComplete: current không null rồi");
                                     current.remove();
                                 }
                                 current = mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory
@@ -233,7 +232,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
+    //hiệu ứng xoay marker
     private void rotareMarker(final Marker current, final float i, GoogleMap mMap) {
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
